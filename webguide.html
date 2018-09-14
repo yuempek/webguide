@@ -1,0 +1,154 @@
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="jslibs/jstree/themes/default/style.min.css" />
+		
+		<script src="jslibs/jquery.min.1.12.1.js"></script>
+		<script src="jslibs/jstree/jstree.min.js"></script>
+		<script src="jslibs/jquery.hotkeys.js"></script>
+		<script>
+			var guidetree;
+			
+			$(function () { 
+				$('#guidetree').jstree({
+					"plugins" : [
+					//	"checkbox",
+					//	"contextmenu",
+					//	"dnd",
+					//	"massload",
+					//	"search",
+					//	"sort",
+					//	"state",
+					//	"types",
+					//	"unique",
+					//	"wholerow",
+					//	"changed",
+					//	"conditionalselect"
+					],
+					'core': {
+					  //'data': [],
+					  'check_callback': true
+					}
+				}); 
+				
+				guidetree = $('#guidetree').jstree(true);
+			});
+			
+			$('#guidetree').on("changed.jstree", function (e, data) {
+			  console.log(data.selected);
+			});
+			
+			$('button').on('click', function () {
+			  $('#guidetree').jstree(true).select_node('child_node_1');
+			  $('#guidetree').jstree('select_node', 'child_node_1');
+			  $.jstree.reference('#guidetree').select_node('child_node_1');
+			});
+			
+			var addTopLevelPage = function(e){
+				console.log("addTopLevelPage");
+				return false; // break the key handl�ng
+			}
+			
+			var addPage = function(parent, node, position, callback, is_loaded){
+				var _parentID = parent;
+				//var _parent = $("#"+ _parentID);
+				var _node = node;
+				var _position = position || "last";
+				var _callback = callback || false;
+				var _is_loaded = is_loaded || false;
+				var newNode = guidetree.create_node(_parentID, _node , _position, _callback, _is_loaded);
+				guidetree.open_node(_parentID);
+				$("#"+newNode+" a").click();
+			}
+			
+			var addChildPage = function(e){
+				var parent = guidetree.get_selected();
+				
+				if(parent.length > 0) {
+					var parent = parent[0];
+					var node = {"text" : "New Child addChildPage"};
+					addPage(parent, node);
+				}
+				
+				console.log("addChildPage");
+				return false; // break the key handl�ng
+			}
+			
+			var addPageAbove = function(e){
+				var parent = guidetree.get_parent(guidetree.get_selected());
+				
+				if(parent) {
+					var node = {"text" : "New Child addPageAbove"};
+					addPage(parent, node);
+				}
+				
+				console.log("addPageAbove");
+				return false; // break the key handl�ng
+			}
+			
+			var addPageBelow = function(e){
+				console.log("addPageBelow");
+				return false; // break the key handl�ng
+			}
+			
+			var renamePage = function(e){
+				console.log("renamePage");
+				return false; // break the key handl�ng
+			}
+			
+			var deletePage = function(e){
+				console.log("deletePage");
+				return false; // break the key handl�ng
+			}
+			
+			var shiftPageUp = function(e){
+				console.log("shiftPageUp");
+				return false; // break the key handl�ng
+			}
+			
+			var shiftPageDown = function(e){
+				console.log("shiftPageDown");
+				return false; // break the key handl�ng
+			}
+			
+			var find = function(e){
+				console.log("find");
+				return false; // break the key handl�ng
+			}
+			
+			
+			//Supported types are 'keydown', 'keyup' and 'keypress'
+			//Modifiers are not case sensitive (Ctrl == ctrl == cTRL)
+			//If you want to use more than one modifier (e.g. alt+ctrl+z) you should define them by an alphabetical order e.g. alt+ctrl+shift
+			$(document).bind('keyup', 'ctrl+return', addTopLevelPage);
+			$(document).bind('keyup', 'return', addChildPage);
+			$(document).bind('keyup', 'insert', addPageAbove);
+			$(document).bind('keyup', 'shift+insert', addPageBelow);
+			$(document).bind('keyup', 'space', renamePage);
+			$(document).bind('keyup', 'f2', renamePage);
+			$(document).bind('keyup', 'del', deletePage);
+			$(document).bind('keyup', 'shift+up', shiftPageUp);
+			$(document).bind('keyup', 'shift+down', shiftPageDown);
+			$(document).bind('keyup', 'ctrl+shift+f', find);
+			
+		</script>
+		<script src="jslibs/tinymce/tinymce.min.js"></script>
+		<script>tinymce.init({ selector:'textarea' });</script>
+	</head>
+	<body>
+		<div id="guidetree">
+		<ul>
+		    <li>Root node 1
+			    <ul>
+			        <li id="child_node_1">Child node 1</li>
+			        <li>Child node 2</li>
+			    </ul>
+		    </li>
+		    <li>Root node 2</li>
+		</ul>
+		</div>
+		<div><textarea></textarea></div>
+		
+	</body>
+</html>
