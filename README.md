@@ -1,2 +1,2 @@
 # webguide
-web base not app based on theguide
+web gui for theguide
